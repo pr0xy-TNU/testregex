@@ -66,7 +66,7 @@ class HTMLHelper implements HTMLOperation {
 
     @Override
     public void showAllLinksByUrl(String url) {
-        if (getAllLinksByUrl(url) != null){
+        if (getAllLinksByUrl(url) != null) {
             Iterator<String> iterator = getAllLinksByUrl(url).iterator();
             while (iterator.hasNext()) {
                 System.out.println(iterator.next());
@@ -105,7 +105,10 @@ class HTMLHelper implements HTMLOperation {
         try {
             URL url = new URL(siteStringUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_FORBIDDEN) {
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN) {
+                System.err.println("Error, Server returned HTTP response code: 403 URL " + connection.getURL());
+                return null;
+            } else {
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(connection.getInputStream()));
                 StringBuilder resultHtml = new StringBuilder();
@@ -116,9 +119,6 @@ class HTMLHelper implements HTMLOperation {
                             .append("\n");
                 }
                 return resultHtml.toString();
-            } else {
-                System.err.println("Error, Server returned HTTP response code: 403 URL " + connection.getURL());
-                return null;
             }
         } catch (IOException e) {
             e.printStackTrace();
