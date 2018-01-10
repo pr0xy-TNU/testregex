@@ -66,21 +66,25 @@ class HTMLHelper implements HTMLOperation {
 
     @Override
     public void showAllLinksByUrl(String url) {
-        Iterator<String > iterator = getAllLinksByUrl(url).iterator();
-        while (iterator.hasNext()){
-            System.out.println(iterator.next());
+        if (getAllLinksByUrl(url) != null){
+            Iterator<String> iterator = getAllLinksByUrl(url).iterator();
+            while (iterator.hasNext()) {
+                System.out.println(iterator.next());
+            }
+            System.out.println();
         }
-        System.out.println();
     }
 
     @Override
     public Set<String> getAllLinksByUrl(String url, String pattern) {
         StringBuilder builder = new StringBuilder();
         String htmlContent = loadHtmlPageByUrl(url);
-        //System.out.println(htmlContent);
-        Set<String> urls = findUrlInHtml(htmlContent, pattern);
-
-        return urls;
+        if (htmlContent != null) {
+            Set<String> urls = findUrlInHtml(htmlContent, pattern);
+            return urls;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -101,16 +105,21 @@ class HTMLHelper implements HTMLOperation {
         try {
             URL url = new URL(siteStringUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-            StringBuilder resultHtml = new StringBuilder();
-            String buffer = null;
-            while ((buffer = reader.readLine()) != null) {
-                resultHtml
-                        .append(buffer)
-                        .append("\n");
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_FORBIDDEN) {
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                StringBuilder resultHtml = new StringBuilder();
+                String buffer = null;
+                while ((buffer = reader.readLine()) != null) {
+                    resultHtml
+                            .append(buffer)
+                            .append("\n");
+                }
+                return resultHtml.toString();
+            } else {
+                System.err.println("Error, Server returned HTTP response code: 403 URL " + connection.getURL());
+                return null;
             }
-            return resultHtml.toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
