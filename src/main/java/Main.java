@@ -15,32 +15,28 @@ public class Main {
 
     public static final Pattern PATTERN = Pattern.compile(easyRegex);
 
+   /* public enum Gender1 {
+        MALE("male"), FEMALE("female");
+
+        Gender(String value) {
+            this.value = value;
+        }
+
+        private String value;
+
+        public String getGender() {
+            return this.value;
+        }
+
+    }*/
+
+    public enum Gender {
+        MALE, FEMALE
+
+    }
 
     public static void main(String[] args) throws IOException {
 
-/*
-        Set<String> hrefs = read();
-        Set<String> result = new HashSet<>();
-        Iterator<String> iterator = hrefs.iterator();
-        while (iterator.hasNext()) {
-            String temp = iterator.next();
-            //result.add(temp.replaceAll("<a href=\"", ""));
-            if (temp.contains("http") || temp.contains("https")) {
-
-                result.add(temp.replaceAll("<a href=\"", ""));
-            }
-        }
-        result.forEach(System.out::println);*/
-        HTMLHelper helper = HTMLHelper.getInstance();
-        Set<String> test1 = helper.getAllLinksByUrl(url4, easyRegex);
-        System.out.println("Test");
-        test1.forEach(System.out::println);
-        System.out.println("Test");
-        Set<String> test2 = helper.getAllLinksByUrl(url4, easyRegex);
-        test2.forEach(System.out::println);
-        System.out.println("Test");
-        Set<String> test3 = helper.getAllLinksByUrl(url4, easyRegex);
-        test3.forEach(System.out::println);
 
     }
 
